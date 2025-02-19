@@ -35,7 +35,7 @@
 
         <h3 class="text-lg font-semibold text-black">Login</h3>
 
-        <form class="space-y-4">
+        <form class="space-y-4" @submit.prevent>
           <div>
             <label class="block text-sm font-medium text-purple-700 mb-2"
               >Username</label
@@ -67,6 +67,7 @@
           <button
             type="submit"
             class="w-full bg-purple-700 text-white py-2 rounded-lg hover:bg-purple-800"
+            @click="redirectToAdmin"
           >
             Login
           </button>
@@ -75,3 +76,13 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+function redirectToAdmin() {
+  router.push('/admin');
+}
+</script>
