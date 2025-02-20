@@ -1,6 +1,33 @@
+<script setup>
+import { ref } from 'vue';
+import CatFormModal from '~/components/modals/CatFormModal.vue';
+import { useModalStore } from '~/stores/modalStore';
+import DeleteCatModal from '~/components/modals/DeleteCatModal.vue';
+
+const modalStore = useModalStore();
+
+const cats = ref([
+  {
+    id: 1,
+    name: 'Miau',
+    description: 'Gato fofo',
+    image:
+      'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  },
+  {
+    id: 2,
+    name: 'Felix',
+    description: 'Gato brincalhão',
+    image:
+      'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  },
+]);
+</script>
+
 <template>
   <div id="view" class="h-full w-screen flex flex-row">
     <CatFormModal />
+    <DeleteCatModal />
     <div
       id="sidebar"
       class="bg-white h-screen md:block shadow-xl px-3 w-30 md:w-60 lg:w-60 overflow-x-hidden transition-transform duration-300 ease-in-out"
@@ -34,7 +61,7 @@
           <UButton
             class="!bg-purple-900 !text-white h-12 w-24 flex items-center justify-center"
             variant="solid"
-            @click="modalStore.openModal()"
+            @click="modalStore.openCreateModal()"
           >
             New Cat
           </UButton>
@@ -96,10 +123,15 @@
                 <button
                   class="bg-purple-50 text-purple-600 px-3 py-2 rounded-lg flex items-center justify-center gap-1"
                 >
-                  <UIcon name="mdi:pencil" class="w-5 h-5 !bg-purple-900" />
+                  <UIcon
+                    name="mdi:pencil"
+                    class="w-5 h-5 !bg-purple-900"
+                    @click="modalStore.openEditModal(cat)"
+                  />
                 </button>
                 <button
                   class="bg-red-50 text-red-600 px-3 py-2 rounded-lg flex items-center justify-center gap-1"
+                  @click="modalStore.openDeleteModal(cat)"
                 >
                   <UIcon name="mdi:delete" class="w-5 h-5" />
                 </button>
@@ -111,26 +143,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import CatFormModal from '~/components/modals/CatFormModal.vue';
-import { useModalStore } from '~/stores/modalStore';
-
-const modalStore = useModalStore();
-
-const cats = ref([
-  {
-    id: 1,
-    name: 'Miau',
-    description: 'Gato fofo',
-    image: '',
-  },
-  {
-    id: 2,
-    name: 'Felix',
-    description: 'Gato brincalhão',
-    image: '',
-  },
-]);
-</script>

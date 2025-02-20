@@ -19,27 +19,52 @@ const state = reactive({
   description: '',
 });
 
+const isEditMode = computed(() => modalStore.action === 'edit');
+
+const showModal = computed(() => {
+  return modalStore.action === 'edit'
+    ? modalStore.isEditModalOpen
+    : modalStore.isCreateModalOpen;
+});
+
+watch(
+  () => modalStore.catToEdit,
+  (newCatToEdit) => {
+    if (modalStore.action === 'edit' && newCatToEdit) {
+      state.image = newCatToEdit.image || '';
+      state.name = newCatToEdit.name || '';
+      state.description = newCatToEdit.description || '';
+    } else {
+      state.image = '';
+      state.name = '';
+      state.description = '';
+    }
+  },
+  { immediate: true }
+);
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log('Form submitted:', event.data);
-  modalStore.closeModal();
+  if (isEditMode.value) {
+    console.log('Updating cat:', event.data);
+  } else {
+    console.log('Creating new cat:', event.data);
+  }
+  modalStore.closeModals();
 }
 </script>
 
 <template>
-  <UModal v-model="modalStore.isOpen">
-    <UCard class="w-full max-w-lg !bg-white">
-      <template #header>
-        <div class="flex justify-between items-center">
-          <h2 class="text-xl font-semibold text-gray-900">Register New Cat</h2>
-          <button
-            @click="modalStore.closeModal"
-            class="bg-gray-100 rounded-2xl"
-          >
-            <UIcon name="i-heroicons-x-mark" class="w-6 h-4 bg-red-500 py-1" />
-          </button>
-        </div>
-        <div class="border-b-2 pb-8"></div>
-      </template>
+  <UModal v-model="showModal">
+    <UCard class="w-full max-w-lg" :ui="{ background: '!bg-white' }">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-gray-900">
+          {{ isEditMode ? 'Edit Cat' : 'Register New Cat' }}
+        </h2>
+        <button @click="modalStore.closeModals" class="bg-gray-100 rounded-2xl">
+          <UIcon name="i-heroicons-x-mark" class="w-6 h-4 bg-red-500 py-1" />
+        </button>
+      </div>
+      <div class="border-b-2 pb-8 mb-8"></div>
 
       <UForm
         :schema="schema"
@@ -53,7 +78,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             <input
               v-model="state.image"
               placeholder="URL and Upload"
-              class="bg-white p-4 border border-gray-300 rounded-lg mt-2 w-full"
+              class="bg-white p-4 border border-gray-300 rounded-lg mt-2 w-full text-black pr-14 overflow-hidden truncate"
             />
             <UIcon
               name="tabler:camera-filled"
@@ -65,15 +90,16 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UFormGroup name="name">
           <label class="text-purple-900 font-semibold">Name</label>
           <input
-            v-model="state.image"
+            v-model="state.name"
             placeholder="Enter the cat's name"
-            class="bg-white p-4 border border-gray-300 rounded-lg mt-2 w-full"
+            class="bg-white p-4 border border-gray-300 rounded-lg mt-2 w-full text-black"
           />
         </UFormGroup>
 
         <UFormGroup name="description">
           <label class="text-purple-900 font-semibold">Description</label>
           <textarea
+            v-model="state.description"
             placeholder="Write here..."
             class="bg-white p-4 border border-gray-300 rounded-lg mt-2 w-full text-black h-32"
           ></textarea>
@@ -83,7 +109,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           <button
             type="button"
             class="bg-gray-100 text-black h-12 px-6 rounded-lg"
-            @click="modalStore.closeModal"
+            @click="modalStore.closeModals"
           >
             Cancel
           </button>
