@@ -30,7 +30,7 @@
           />
         </div>
 
-        <div class="p-4 block">
+        <div class="p-4">
           <h5 class="text-lg font-semibold text-gray-900">
             {{ cat.name }}
           </h5>

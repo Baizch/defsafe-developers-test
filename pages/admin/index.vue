@@ -1,5 +1,6 @@
 <template>
   <div id="view" class="h-full w-screen flex flex-row">
+    <CatFormModal />
     <div
       id="sidebar"
       class="bg-white h-screen md:block shadow-xl px-3 w-30 md:w-60 lg:w-60 overflow-x-hidden transition-transform duration-300 ease-in-out"
@@ -22,7 +23,9 @@
     <div class="flex-1 w-full flex flex-col mt-14">
       <div class="flex justify-between p-4 ml-12 mr-12 mb-8">
         <div class="flex items-center space-x-8">
-          <UIcon name="solar:cat-bold" class="w-10 h-10 bg-purple-900 ml-2" />
+          <UButton class="!bg-purple-200">
+            <UIcon name="solar:cat-bold" class="w-10 h-10 bg-purple-900 ml-2" />
+          </UButton>
           <h1 class="text-2xl text-black font-bold flex items-center gap-2">
             Cat List
           </h1>
@@ -31,6 +34,7 @@
           <UButton
             class="!bg-purple-900 !text-white h-12 w-24 flex items-center justify-center"
             variant="solid"
+            @click="modalStore.openModal()"
           >
             New Cat
           </UButton>
@@ -90,12 +94,12 @@
                 class="px-6 py-6 whitespace-nowrap text-sm font-medium flex items-center gap-2 float-right"
               >
                 <button
-                  class="bg-purple-100 text-purple-600 px-3 py-2 rounded-lg flex items-center justify-center gap-1"
+                  class="bg-purple-50 text-purple-600 px-3 py-2 rounded-lg flex items-center justify-center gap-1"
                 >
                   <UIcon name="mdi:pencil" class="w-5 h-5 !bg-purple-900" />
                 </button>
                 <button
-                  class="bg-red-100 text-red-600 px-3 py-2 rounded-lg flex items-center justify-center gap-1"
+                  class="bg-red-50 text-red-600 px-3 py-2 rounded-lg flex items-center justify-center gap-1"
                 >
                   <UIcon name="mdi:delete" class="w-5 h-5" />
                 </button>
@@ -110,6 +114,10 @@
 
 <script setup>
 import { ref } from 'vue';
+import CatFormModal from '~/components/modals/CatFormModal.vue';
+import { useModalStore } from '~/stores/modalStore';
+
+const modalStore = useModalStore();
 
 const cats = ref([
   {
