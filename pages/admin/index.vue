@@ -4,6 +4,10 @@ import CatFormModal from '~/components/modals/CatFormModal.vue';
 import { useModalStore } from '~/stores/modalStore';
 import DeleteCatModal from '~/components/modals/DeleteCatModal.vue';
 
+definePageMeta({
+  middleware: 'auth',
+});
+
 const modalStore = useModalStore();
 
 const cats = ref([

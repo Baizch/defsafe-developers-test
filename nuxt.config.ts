@@ -9,4 +9,12 @@ export default defineNuxtConfig({
       Inter: true,
     },
   },
+  runtimeConfig: {
+    SUPABASE_KEY: process.env.SUPABASE_KEY,
+
+    public: {
+      SUPABASE_URL: process.env.SUPABASE_URL,
+      SUPABASE_KEY: process.env.SUPABASE_KEY,
+    },
+  },
 });
